@@ -21,6 +21,7 @@ namespace eCommerceSite.Models
         /// Retail price as US currency
         /// </summary>
         [DataType(DataType.Currency)]
+        //[Display(Name ="Retail Price")] change the name for the title
         public double Price { get; set; }
         /// <summary>
         /// Category Product falls under ex: Electronics, Furnature, etc.
