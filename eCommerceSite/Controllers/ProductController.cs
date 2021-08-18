@@ -25,16 +25,23 @@ namespace eCommerceSite.Controllers
         {
             // can be condensed further! int pageNum = id ?? 1; null coalesing operator ??
             int pageNum = id.HasValue ? id.Value : 1; // if else ternary operator
-            const int pageSize = 3;
+            const int PageSize = 3;
+            ViewData["CurrentPage"] = pageNum;
+
+            int numProducts = await (from p in _context.Products
+                               select p).CountAsync();
+            int totalPages = (int)Math.Ceiling((double)numProducts / PageSize);
+
+            ViewData["MaxPage"] = totalPages;
 
 
             //Async with Query Syntax
-            List<Product> products =
+            List < Product > products =
                 await (from p in _context.Products
                        orderby p.Title ascending
                        select p)
-                       .Skip(pageSize * (pageNum - 1))
-                       .Take(pageSize)
+                       .Skip(PageSize * (pageNum - 1))
+                       .Take(PageSize)
                        .ToListAsync();
 
             // Get all products from DB
