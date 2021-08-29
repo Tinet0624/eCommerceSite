@@ -1,5 +1,6 @@
 ﻿using eCommerceSite.Data;
 using eCommerceSite.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,6 +49,11 @@ namespace eCommerceSite.Controllers
 
         public IActionResult Login()
         {
+            // Check if user is already logged in
+            if (HttpContext.Session.GetInt32("UserId").HasValue)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -80,9 +86,10 @@ namespace eCommerceSite.Controllers
                 return View(logIn);
             }
             // Say Hello!
-            TempData["Message"] = $"Welcome {account.UserName}!";
-            // Log User into website
+            TempData["Message"] = $"Welcome back {account.UserName}!";
 
+            // Log User into website. Do this after adding sessions to start up.
+            HttpContext.Session.SetInt32("UserId", account.UserID);
 
             return RedirectToAction("Index", "Home");
         }
