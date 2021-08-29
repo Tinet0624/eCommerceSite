@@ -19,19 +19,28 @@ namespace eCommerceSite.Models
     public class RegisterViewModel
     { // Does not go in DB do not add DbSet for this!!
         [Required]
+        [EmailAddress]
+        [StringLength(200)]
+        [Display(Name = "Confirm Email")]
         public string Email { get; set; }
 
-        [Compare(nameof(Email))] // Might need to put required...
+        [Required]
+        [Compare(nameof(Email))]
+        [Display(Name = "Confirm Email")]
         public string ConfirmEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [StringLength(120, MinimumLength = 6, ErrorMessage = "Password must be at least {2} characters.")]
         public string Password { get; set; }
 
-        [Compare(nameof(Password))] // Might need to put required...
+        [Required]
+        [Compare(nameof(Password))]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         [DataType(DataType.Date)] // Time ignored
+        [Display(Name = "Date of Birth")]
         public DateTime? DateOfBirth { get; set; } // Optional
     }
 }
