@@ -60,7 +60,7 @@ namespace eCommerceSite
 
             app.UseAuthorization();
 
-            // Add this for new config sessions
+            // Add this for new config sessions must be between UseRouting() and UseEndpoints()
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
