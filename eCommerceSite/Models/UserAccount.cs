@@ -19,6 +19,11 @@ namespace eCommerceSite.Models
     public class RegisterViewModel
     { // Does not go in DB do not add DbSet for this!!
         [Required]
+        [StringLength(20)]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        [Required]
         [EmailAddress]
         [StringLength(200)]
         [Display(Name = "Confirm Email")]
