@@ -29,29 +29,10 @@ namespace eCommerceSite.Controllers
         public async Task<IActionResult> Add(int id)
         {
             Product p = await ProductDB.GetSingleProductAsync(_context, id);
-            const string CartCookie = "CartCookie";
 
-            // Get exsisting cart items
-            string exsistingCart = _httpContext.HttpContext.Request.Cookies[CartCookie];
-            List<Product> cartProducts = new List<Product>();
-            if (exsistingCart != null)
-            {
-                cartProducts = JsonConvert.DeserializeObject<List<Product>>(exsistingCart);
-            }
             // Add current product to exsisting cart
-            cartProducts.Add(p);
+            CookieHelper.AddProductToCart(_httpContext, p);
 
-            // Add products to the cart cookie
-            string data = JsonConvert.SerializeObject(cartProducts);
-
-            // Cookie Options
-            CookieOptions options = new CookieOptions() // Chocolate?
-            {
-                Expires = DateTime.Now.AddYears(1),
-                Secure = true,
-                IsEssential = true
-            };
-            _httpContext.HttpContext.Response.Cookies.Append(CartCookie, data, options);
             // redirect to preivious page
             return RedirectToAction("Index", "Product");
         }
@@ -59,10 +40,7 @@ namespace eCommerceSite.Controllers
         public IActionResult Summary()
         {
             // Display all products in the shopping cart cookie
-            string cookieData = _httpContext.HttpContext.Request.Cookies["CartCookie"];
-
-            List<Product> cartProducts = JsonConvert.DeserializeObject<List<Product>>(cookieData);
-
+            List<Product> cartProducts = CookieHelper.GetCartProducts(_httpContext);
             return View(cartProducts);
         }
     }
