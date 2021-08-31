@@ -32,6 +32,7 @@ namespace eCommerceSite.Controllers
 
             // Add current product to exsisting cart
             CookieHelper.AddProductToCart(_httpContext, p);
+            TempData["Message"] = $"{p.Title} added successfully to your cart.";
 
             // redirect to preivious page
             return RedirectToAction("Index", "Product");
